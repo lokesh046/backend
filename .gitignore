@@ -1,0 +1,67 @@
+# Environment files (credentials, secrets)
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+pipenv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+chroma.sqlite3
+
+# Cache & logs
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS
+node_modules/
+.git/
+nul
+
+# Uploads & temp files
+uploads/
+temp/
+tmp/
+cookies.txt

@@ -1,0 +1,41 @@
+# Core Framework
+fastapi
+uvicorn[standard]
+
+# Database (Async + Sync support)
+sqlalchemy
+asyncpg
+psycopg2-binary
+alembic
+
+# Authentication & Security
+python-jose[cryptography]
+passlib[bcrypt]
+pwdlib[argon2]
+
+# Data Validation & Forms
+pydantic[email]
+python-multipart
+
+# HTTP Clients
+httpx
+requests
+
+# Caching
+redis[hiredis]
+
+# AI / ML
+pinecone
+google-generativeai
+google-genai
+huggingface-hub
+
+# Data Processing
+pandas
+
+# File Handling
+pypdf
+python-docx
+
+# Utilities
+python-dotenv
