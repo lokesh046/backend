@@ -32,19 +32,19 @@ app = FastAPI(
     description="API Gateway for Financial Planning Microservices"
 )
 
+ALLOWED_ORIGINS = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:5173,http://localhost:5174"
+).split(",")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:5174",
-        "http://localhost:5174",
-    ],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
 app.include_router(chat_router, tags=["Chat"])
 app.include_router(explain_router, tags=["Explain"])
