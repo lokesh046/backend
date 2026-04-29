@@ -1,8 +1,13 @@
 import os
 import smtplib
 import asyncio
+import logging
 from email.message import EmailMessage
 from dotenv import load_dotenv
+
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -14,8 +19,8 @@ async def send_email_async(to_email: str, subject: str, html_content: str):
     smtp_password = os.environ.get("SMTP_APP_PASSWORD", "").strip()
 
     if not smtp_email or not smtp_password:
-        print(f"⚠️ [MOCK EMAIL] To: {to_email} | Subject: {subject}")
-        print(f"Content:\n{html_content}\n")
+        logger.warning(f"[MOCK EMAIL] To: {to_email} | Subject: {subject}")
+        logger.info(f"Content preview: {html_content[:100]}...")
         return
 
     msg = EmailMessage()
@@ -26,13 +31,23 @@ async def send_email_async(to_email: str, subject: str, html_content: str):
     msg.add_alternative(html_content, subtype='html')
 
     def _send():
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
-            server.starttls()
-            server.login(smtp_email, smtp_password)
-            server.send_message(msg)
+        # Using a context manager for SMTP ensures it closes properly
+        # Added 10s timeout to prevent hanging
+        try:
+            with smtplib.SMTP("smtp.gmail.com", 587, timeout=10) as server:
+                server.ehlo() # Identify ourselves to the server
+                server.starttls() # Secure the connection
+                server.ehlo() # Re-identify after TLS
+                server.login(smtp_email, smtp_password)
+                server.send_message(msg)
+            return True
+        except Exception as e:
+            logger.error(f"SMTP Error for {to_email}: {e}")
+            raise e
 
     try:
         await asyncio.to_thread(_send)
-        print(f"✅ Email sent to {to_email}")
+        logger.info(f"SUCCESS: Email sent to {to_email}")
     except Exception as e:
-        print(f"❌ Failed to send email to {to_email}: {e}")
+        logger.error(f"FAILURE: Could not send email to {to_email}. Error: {e}")
+

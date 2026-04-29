@@ -26,7 +26,10 @@ from health_service.financial_health_score import calculate_financial_health_sco
 from loan_optimzer_service.loan_engine import calculate_emi, generate_amortization_schedule, suggest_optimal_emi, normalize_interest_rate
 from chat_service.main import router as chat_router
 from explain_service.main import router as explain_router
+from dotenv import load_dotenv
 
+# Load environment variables early
+load_dotenv()
 app = FastAPI(
     title="Wealth To FIRE Gateway (Async)",
     description="API Gateway for Financial Planning Microservices"

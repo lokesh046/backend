@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
 import secrets
 from datetime import datetime, timedelta
+import os
 
 from shared.database import get_db
 from shared.models.user import User, EmailVerificationOTP, PasswordResetToken
@@ -218,7 +219,8 @@ async def forgot_password(data: ForgotPasswordRequest, background_tasks: Backgro
     await db.commit()
 
     # Send Email with token format user.id:raw_token to prevent bcrypt DoS
-    reset_link = f"http://localhost:5173/reset-password?token={user.id}:{raw_token}"
+    frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:5173").rstrip("/")
+    reset_link = f"{frontend_url}/reset-password?token={user.id}:{raw_token}"
     html_content = f"<h3>Reset Your Password</h3><p>Click the link below to reset your password. This link is valid for 15 minutes.</p><p><a href='{reset_link}'>{reset_link}</a></p>"
     background_tasks.add_task(send_email_async, user.email, "Reset Your Password", html_content)
 
