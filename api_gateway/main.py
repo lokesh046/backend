@@ -52,6 +52,7 @@ app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
 app.include_router(chat_router, tags=["Chat"])
 app.include_router(explain_router, tags=["Explain"])
 
+
 @app.on_event("startup")
 async def startup():
     try:
