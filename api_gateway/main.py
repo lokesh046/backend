@@ -757,3 +757,7 @@ async def get_dashboard(
             } if loans else None
         }
     }
+
+@app.get("/ping")
+async def ping():
+    return {"status": "ok"}
